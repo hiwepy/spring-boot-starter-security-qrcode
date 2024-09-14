@@ -41,10 +41,10 @@ public class QrcodeMatchedAuthenticationFailureHandler implements MatchedAuthent
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 		
 		if (e instanceof AuthenticationQrcodeNotFoundException) {
-			JSONObject.writeJSONString(response.getWriter(), AuthResponse.of(AuthResponseCode.SC_AUTHZ_CODE_REQUIRED.getCode(), 
+			JSONObject.writeJSONString(response.getOutputStream(), AuthResponse.of(AuthResponseCode.SC_AUTHZ_CODE_REQUIRED.getCode(),
 					messages.getMessage(AuthResponseCode.SC_AUTHZ_CODE_REQUIRED.getMsgKey(), e.getMessage())));
 		} else {
-			JSONObject.writeJSONString(response.getWriter(), AuthResponse.of(AuthResponseCode.SC_AUTHZ_FAIL.getCode(),
+			JSONObject.writeJSONString(response.getOutputStream(), AuthResponse.of(AuthResponseCode.SC_AUTHZ_FAIL.getCode(),
 					messages.getMessage(AuthResponseCode.SC_AUTHZ_FAIL.getMsgKey())));
 		}
 		

@@ -13,7 +13,7 @@
 	<groupId>com.github.hiwepy</groupId>
 	<artifactId>security-qrcode-spring-boot-starter</artifactId>
 	<description>Spring Boot Starter For Spring Security With QrCode</description>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>2.3.x.20240823-SNAPSHOT</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<url>https://github.com/hiwepy/${project.artifactId}</url>
 	<packaging>jar</packaging>
@@ -21,7 +21,7 @@
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
 
@@ -35,7 +35,7 @@
 	<developers>
 		<developer>
 			<name>wandl</name>
-			<email>hnxyhcwdl1003@163.com</email>
+			<email>hiwepy@gmail.com</email>
 			<roles>
 				<role>developer</role>
 			</roles>
@@ -362,10 +362,10 @@
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
 		<maven-nexus-staging-plugin.version>1.6.8</maven-nexus-staging-plugin.version>
-		<fastjson.version>1.2.79</fastjson.version>
+		<fastjson2.version>2.0.52</fastjson2.version>
 		<jwt-issuer.version>1.1.8.RELEASE</jwt-issuer.version>
-		<spring-security-biz.version>1.0.9.RELEASE</spring-security-biz.version>
-		<spring-boot-starter-zxing.version>1.0.2.RELEASE</spring-boot-starter-zxing.version>
+		<spring-boot-starter-security-biz.version>2.3.x.20240823.RELEASE</spring-boot-starter-security-biz.version>
+		<spring-boot-starter-zxing.version>2.3.x.20240823.RELEASE</spring-boot-starter-zxing.version>
 		<swagger.version>1.5.24</swagger.version>
 	</properties>
 
@@ -375,7 +375,7 @@
 			<dependency>
 				<groupId>com.github.hiwepy</groupId>
 				<artifactId>security-biz-spring-boot-starter</artifactId>
-				<version>${spring-security-biz.version}</version>
+				<version>${spring-boot-starter-security-biz.version}</version>
 			</dependency>
 			<!-- https://github.com/hiwepy/spring-boot-starter-zxing -->
 			<dependency>
@@ -383,11 +383,11 @@
 				<artifactId>zxing-spring-boot-starter</artifactId>
 				<version>${spring-boot-starter-zxing.version}</version>
 			</dependency>
-			<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+			<!-- https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
 			<dependency>
-			    <groupId>com.alibaba</groupId>
-			    <artifactId>fastjson</artifactId>
-			    <version>${fastjson.version}</version>
+				<groupId>com.alibaba.fastjson2</groupId>
+				<artifactId>fastjson2</artifactId>
+				<version>${fastjson2.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.github.hiwepy</groupId>
@@ -497,8 +497,8 @@
 			<artifactId>commons-pool2</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
+			<groupId>com.alibaba.fastjson2</groupId>
+			<artifactId>fastjson2</artifactId>
 		</dependency>
 
 		<dependency>

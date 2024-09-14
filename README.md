@@ -13,7 +13,7 @@
 ``` xml
 <dependency>
 	<groupId>com.github.hiwepy</groupId>
-	<artifactId>security-zxing-spring-boot-starter</artifactId>
+	<artifactId>security-qrcode-spring-boot-starter</artifactId>
 	<version>${project.version}</version>
 </dependency>
 ```

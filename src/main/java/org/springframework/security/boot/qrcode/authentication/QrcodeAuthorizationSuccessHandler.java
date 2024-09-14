@@ -80,7 +80,7 @@ public class QrcodeAuthorizationSuccessHandler implements MatchedAuthenticationS
 		// 国际化后的异常信息
 		String message = messages.getMessage(AuthResponseCode.SC_AUTHC_SUCCESS.getMsgKey());
 		// 写出JSON
-		JSONObject.writeJSONString(response.getWriter(), AuthResponse.success(message, profilePayload));
+		JSONObject.writeJSONString(response.getOutputStream(), AuthResponse.success(message, profilePayload));
 		
 		clearAuthenticationAttributes(request);
 				
