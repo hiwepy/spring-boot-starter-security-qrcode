@@ -29,6 +29,7 @@ import org.springframework.security.boot.utils.WebSecurityUtils;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
@@ -43,15 +44,14 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 public class SecurityQrcodeFilterConfiguration {
  
 	@Bean
-	public QrcodeAuthorizationProvider qrcodeAuthorizationProvider(JwtPayloadRepository payloadRepository,
-    		UserDetailsServiceAdapter userDetailsService) {
-		return new QrcodeAuthorizationProvider(payloadRepository, userDetailsService);
+	public QrcodeAuthorizationProvider qrcodeAuthorizationProvider(ObjectProvider<UserDetailsServiceAdapter> userDetailsServiceProvider,
+																   ObjectProvider<JwtPayloadRepository> payloadRepositoryProvider) {
+		return new QrcodeAuthorizationProvider(payloadRepositoryProvider.getIfAvailable(), userDetailsServiceProvider.getIfAvailable());
 	}
 	
 	@Configuration
 	@EnableConfigurationProperties({ SecurityQrcodeProperties.class, SecurityQrcodeAuthzProperties.class, SecurityBizProperties.class, SecuritySessionMgtProperties.class })
-	@Order(SecurityProperties.DEFAULT_FILTER_ORDER + 2)
-	static class QrcodeWebSecurityConfigurerAdapter extends WebSecurityBizConfigurerAdapter {
+	static class QrcodeWebSecurityCustomizerAdapter extends WebSecurityCustomizerAdapter {
 
 	    private final SecurityQrcodeAuthzProperties authcProperties;
 	    
@@ -62,7 +62,7 @@ public class SecurityQrcodeFilterConfiguration {
     	private final RememberMeServices rememberMeServices;
 		private final SessionAuthenticationStrategy sessionAuthenticationStrategy;
 	    
-		public QrcodeWebSecurityConfigurerAdapter(
+		public QrcodeWebSecurityCustomizerAdapter(
 				
 				SecurityBizProperties bizProperties,
 				SecuritySessionMgtProperties sessionMgtProperties,
@@ -118,30 +118,31 @@ public class SecurityQrcodeFilterConfiguration {
 			
 	        return authenticationFilter;
 	    }
-		
-		@Override
-		public void configure(HttpSecurity http) throws Exception {
-			
-   	    	http.antMatcher(authcProperties.getPathPattern())
-   	        	.exceptionHandling()
-   	        	.authenticationEntryPoint(authenticationEntryPoint)
-   	        	.and()
-   	        	.httpBasic()
-   	        	.disable()
-   	        	.addFilterBefore(localeContextFilter, UsernamePasswordAuthenticationFilter.class)
-   	        	.addFilterBefore(authenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class); 
 
-   	    	super.configure(http, authcProperties.getCors());
-   	    	super.configure(http, authcProperties.getCsrf());
-   	    	super.configure(http, authcProperties.getHeaders());
-	    	super.configure(http);
-	    	
+		@Bean
+		@Order(SecurityProperties.DEFAULT_FILTER_ORDER + 2)
+		public SecurityFilterChain dingTalkMaSecurityFilterChain(HttpSecurity http) throws Exception {
+			http = http.antMatcher(authcProperties.getPathPattern())
+					.exceptionHandling()
+					.authenticationEntryPoint(authenticationEntryPoint)
+					.and()
+					.httpBasic()
+					.disable()
+					.addFilterBefore(localeContextFilter, UsernamePasswordAuthenticationFilter.class)
+					.addFilterBefore(authenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
+
+			super.configure(http, authcProperties.getCors());
+			super.configure(http, authcProperties.getCsrf());
+			super.configure(http, authcProperties.getHeaders());
+			super.configure(http);
+
+			return http.build();
 		}
-		
+
 		@Override
-	    public void configure(WebSecurity web) throws Exception {
-	    	super.configure(web);
-	    }
+		public void customize(WebSecurity web) {
+			super.customize(web);
+		}
 		
 	}
 	
