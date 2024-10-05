@@ -1,12 +1,6 @@
 package org.springframework.security.boot.qrcode.authentication;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.alibaba.fastjson2.JSON;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,7 +12,11 @@ import org.springframework.security.boot.qrcode.exception.AuthenticationQrcodeNo
 import org.springframework.security.boot.utils.SubjectUtils;
 import org.springframework.security.core.AuthenticationException;
 
-import com.alibaba.fastjson.JSONObject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Post认证请求失败后的处理实现
@@ -41,10 +39,10 @@ public class QrcodeMatchedAuthenticationFailureHandler implements MatchedAuthent
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 		
 		if (e instanceof AuthenticationQrcodeNotFoundException) {
-			JSONObject.writeJSONString(response.getOutputStream(), AuthResponse.of(AuthResponseCode.SC_AUTHZ_CODE_REQUIRED.getCode(),
+			JSON.writeTo(response.getOutputStream(), AuthResponse.of(AuthResponseCode.SC_AUTHZ_CODE_REQUIRED.getCode(),
 					messages.getMessage(AuthResponseCode.SC_AUTHZ_CODE_REQUIRED.getMsgKey(), e.getMessage())));
 		} else {
-			JSONObject.writeJSONString(response.getOutputStream(), AuthResponse.of(AuthResponseCode.SC_AUTHZ_FAIL.getCode(),
+			JSON.writeTo(response.getOutputStream(), AuthResponse.of(AuthResponseCode.SC_AUTHZ_FAIL.getCode(),
 					messages.getMessage(AuthResponseCode.SC_AUTHZ_FAIL.getMsgKey())));
 		}
 		

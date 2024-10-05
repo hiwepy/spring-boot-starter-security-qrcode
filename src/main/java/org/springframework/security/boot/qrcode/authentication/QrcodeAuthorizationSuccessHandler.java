@@ -15,15 +15,8 @@
  */
 package org.springframework.security.boot.qrcode.authentication;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSON;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -41,7 +34,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.WebAttributes;
 
-import com.alibaba.fastjson.JSONObject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 public class QrcodeAuthorizationSuccessHandler implements MatchedAuthenticationSuccessHandler {
 
@@ -80,7 +79,7 @@ public class QrcodeAuthorizationSuccessHandler implements MatchedAuthenticationS
 		// 国际化后的异常信息
 		String message = messages.getMessage(AuthResponseCode.SC_AUTHC_SUCCESS.getMsgKey());
 		// 写出JSON
-		JSONObject.writeJSONString(response.getOutputStream(), AuthResponse.success(message, profilePayload));
+		JSON.writeTo(response.getOutputStream(), AuthResponse.success(message, profilePayload));
 		
 		clearAuthenticationAttributes(request);
 				
