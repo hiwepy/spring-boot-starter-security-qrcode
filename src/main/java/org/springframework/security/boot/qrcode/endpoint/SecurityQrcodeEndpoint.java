@@ -1,27 +1,21 @@
 package org.springframework.security.boot.qrcode.endpoint;
 
-import java.time.Duration;
-import java.util.Map;
-import java.util.UUID;
-
 import com.alibaba.fastjson2.JSONObject;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.beust.jcommander.internal.Maps;
 import com.google.zxing.spring.boot.ZxingQrCodeTemplate;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.Duration;
+import java.util.Map;
+import java.util.UUID;
 
 @Api(tags = "认证授权：二维码扫码登录")
 @RestController

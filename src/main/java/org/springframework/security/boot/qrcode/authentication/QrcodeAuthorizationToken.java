@@ -14,11 +14,12 @@
  * the License.
  */
 package org.springframework.security.boot.qrcode.authentication;
-import java.util.Collection;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
+
+import java.util.Collection;
 
 public class QrcodeAuthorizationToken extends AbstractAuthenticationToken {
     

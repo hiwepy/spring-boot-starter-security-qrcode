@@ -1,8 +1,6 @@
 package org.springframework.security.boot.qrcode.authentication;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import com.github.hiwepy.jwt.JwtPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -22,7 +20,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsChecker;
 import org.springframework.util.Assert;
 
-import com.github.hiwepy.jwt.JwtPayload;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *

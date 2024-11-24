@@ -15,10 +15,10 @@
  */
 package org.springframework.security.boot.qrcode.userdetails;
 
-import java.util.Collection;
-
 import org.springframework.security.boot.biz.userdetails.SecurityPrincipal;
 import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
 
 /**
  * TODO

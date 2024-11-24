@@ -1,8 +1,5 @@
 package org.springframework.security.boot;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.biz.web.servlet.i18n.LocaleContextFilter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -28,13 +25,19 @@ import org.springframework.security.boot.qrcode.authentication.QrcodeAuthorizati
 import org.springframework.security.boot.utils.WebSecurityUtils;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.CompositeAccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @AutoConfigureBefore({ SecurityFilterAutoConfiguration.class })
@@ -54,7 +57,8 @@ public class SecurityQrcodeFilterConfiguration {
 	static class QrcodeWebSecurityCustomizerAdapter extends WebSecurityCustomizerAdapter {
 
 	    private final SecurityQrcodeAuthzProperties authcProperties;
-	    
+
+		private final AccessDeniedHandler accessDeniedHandler;
 	    private final LocaleContextFilter localeContextFilter;
 	    private final AuthenticationEntryPoint authenticationEntryPoint;
 	    private final AuthenticationSuccessHandler authenticationSuccessHandler;
@@ -68,6 +72,7 @@ public class SecurityQrcodeFilterConfiguration {
 				SecuritySessionMgtProperties sessionMgtProperties,
 				SecurityQrcodeAuthzProperties authzProperties,
 
+				ObjectProvider<AccessDeniedHandler> accessDeniedHandlerProvider,
 				ObjectProvider<LocaleContextFilter> localeContextProvider,
 				ObjectProvider<AuthenticationProvider> authenticationProvider,
    				ObjectProvider<AuthenticationListener> authenticationListenerProvider,
@@ -82,7 +87,8 @@ public class SecurityQrcodeFilterConfiguration {
 			super(bizProperties, sessionMgtProperties, authenticationProvider.stream().collect(Collectors.toList()));
 			
 			this.authcProperties = authzProperties;
-			
+
+			this.accessDeniedHandler = new CompositeAccessDeniedHandler(accessDeniedHandlerProvider.stream().collect(Collectors.toList()));
 			this.localeContextFilter = localeContextProvider.getIfAvailable();
    			List<AuthenticationListener> authenticationListeners = authenticationListenerProvider.stream().collect(Collectors.toList());
    			this.authenticationEntryPoint = WebSecurityUtils.authenticationEntryPoint(authcProperties, sessionMgtProperties, authenticationEntryPointProvider.stream().collect(Collectors.toList()));
@@ -122,13 +128,14 @@ public class SecurityQrcodeFilterConfiguration {
 		@Bean
 		@Order(SecurityProperties.DEFAULT_FILTER_ORDER + 2)
 		public SecurityFilterChain dingTalkMaSecurityFilterChain(HttpSecurity http) throws Exception {
-			http = http.antMatcher(authcProperties.getPathPattern())
-					.exceptionHandling()
-					.authenticationEntryPoint(authenticationEntryPoint)
-					.and()
-					.httpBasic()
-					.disable()
-					.addFilterBefore(localeContextFilter, UsernamePasswordAuthenticationFilter.class)
+			http.securityMatcher(authcProperties.getPathPattern())
+					.exceptionHandling(configurer -> {
+						configurer.authenticationEntryPoint(authenticationEntryPoint)
+								.accessDeniedHandler(accessDeniedHandler)
+								.accessDeniedPage(authcProperties.getAccessDeniedUrl());
+					});
+			http.httpBasic(AbstractHttpConfigurer::disable);
+			http.addFilterBefore(localeContextFilter, UsernamePasswordAuthenticationFilter.class)
 					.addFilterBefore(authenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
 
 			super.configure(http, authcProperties.getCors());

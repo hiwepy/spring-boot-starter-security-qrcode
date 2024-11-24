@@ -1,5 +1,6 @@
 package org.springframework.security.boot;
 
+import com.google.zxing.spring.boot.ZxingQrCodeTemplate;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -12,8 +13,6 @@ import org.springframework.security.boot.qrcode.authentication.QrcodeAuthorizati
 import org.springframework.security.boot.qrcode.authentication.QrcodeMatchedAuthenticationEntryPoint;
 import org.springframework.security.boot.qrcode.authentication.QrcodeMatchedAuthenticationFailureHandler;
 import org.springframework.security.boot.qrcode.endpoint.SecurityQrcodeEndpoint;
-
-import com.google.zxing.spring.boot.ZxingQrCodeTemplate;
 
 @Configuration
 @AutoConfigureBefore(SecurityBizAutoConfiguration.class)

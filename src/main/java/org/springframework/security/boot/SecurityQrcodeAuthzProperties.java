@@ -15,13 +15,12 @@
  */
 package org.springframework.security.boot;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.security.boot.biz.property.SecurityAuthcProperties;
-import org.springframework.security.boot.qrcode.authentication.QrcodeAuthorizationProcessingFilter;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.security.boot.biz.property.SecurityAuthcProperties;
+import org.springframework.security.boot.qrcode.authentication.QrcodeAuthorizationProcessingFilter;
 
 @ConfigurationProperties(prefix = SecurityQrcodeAuthzProperties.PREFIX)
 @Getter
